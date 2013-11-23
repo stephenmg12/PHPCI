@@ -37,6 +37,7 @@ class ProjectBase extends Model
         'title' => null,
         'reference' => null,
         'git_key' => null,
+        'location' => null,
         'type' => null,
         'token' => null,
         'access_information' => null,
@@ -51,6 +52,7 @@ class ProjectBase extends Model
         'title' => 'getTitle',
         'reference' => 'getReference',
         'git_key' => 'getGitKey',
+        'location' => 'getLocation',
         'type' => 'getType',
         'token' => 'getToken',
         'access_information' => 'getAccessInformation',
@@ -67,6 +69,7 @@ class ProjectBase extends Model
         'title' => 'setTitle',
         'reference' => 'setReference',
         'git_key' => 'setGitKey',
+        'location' => 'setLocation',
         'type' => 'setType',
         'token' => 'setToken',
         'access_information' => 'setAccessInformation',
@@ -97,6 +100,11 @@ class ProjectBase extends Model
             'type' => 'text',
             'nullable' => true,
             'default' => null,
+        ),
+        'location' => array(
+            'type' => 'varchar',
+            'length' => 50,
+            'default' => 1,
         ),
         'type' => array(
             'type' => 'varchar',
@@ -291,6 +299,26 @@ class ProjectBase extends Model
         $this->data['git_key'] = $value;
 
         $this->_setModified('git_key');
+    }
+
+    /**
+     * Set the value of Location / location.
+     *
+     * Must not be null.
+     * @param $value string
+     */
+    public function setLocation($value)
+    {
+        $this->_validateNotNull('Location', $value);
+        $this->_validateString('Location', $value);
+
+        if ($this->data['Location'] === $value) {
+            return;
+        }
+
+        $this->data['location'] = $value;
+
+        $this->_setModified('location');
     }
 
     /**

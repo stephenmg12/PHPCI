@@ -171,7 +171,7 @@ class ProjectController extends \PHPCI\Controller
 
         $values = $form->getValues();
 
-        if ($values['type'] == "gitlab") {
+        if ($values['location'] == "gitlab") {
             preg_match('`^(.*)@(.*):(.*)/(.*)\.git`', $values['reference'], $matches);
             $info = array();
             $info["user"] = $matches[1];
@@ -259,21 +259,36 @@ class ProjectController extends \PHPCI\Controller
         $form->addField(new Form\Element\Csrf('csrf'));
         $form->addField(new Form\Element\Hidden('pubkey'));
 
-        $options = array(
-            'choose' => 'Select repository type...',
+        $locations = array(
+            'choose' => 'Select repository location...',
             'github' => 'Github',
             'bitbucket' => 'Bitbucket',
             'gitlab' => 'Gitlab',
             'remote' => 'Remote URL',
             'local' => 'Local Path',
-            'hg'    => 'Mercurial',
             );
+
+        $field = new Form\Element\Select('location');
+        $field->setRequired(true);
+        $field->setPattern('^(github|bitbucket|gitlab|remote|local|hg)');
+        $field->setOptions($locations);
+        $field->setLabel('Where is your project hosted?');
+        $field->setClass('form-control');
+        $field->setContainerClass('form-group');
+        $form->addField($field);
+
+        $types = array(
+            'choose' => 'Select repository type...',
+            'git' => 'Git',
+            'local' => 'Local Path',
+            'hg'    => 'Mercurial',
+        );
 
         $field = new Form\Element\Select('type');
         $field->setRequired(true);
-        $field->setPattern('^(github|bitbucket|gitlab|remote|local|hg)');
-        $field->setOptions($options);
-        $field->setLabel('Where is your project hosted?');
+        $field->setPattern('^(git|local|hg)');
+        $field->setOptions($types);
+        $field->setLabel('What Version Control System does your project use?');
         $field->setClass('form-control');
         $field->setContainerClass('form-group');
         $form->addField($field);
